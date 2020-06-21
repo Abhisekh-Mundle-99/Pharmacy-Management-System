@@ -185,7 +185,7 @@ def sel_mn(e):
             break
         x+=1
     c.commit()
-    print (sl)
+    print (sl,"serial")
     name_nm=n[int(sl)]
     print (name_nm)
     
