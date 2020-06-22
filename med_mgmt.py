@@ -15,7 +15,7 @@ login = sqlite3.connect("admin.db")
 l = login.cursor()
 
 connection = sqlite3.connect("medicine.db")
-cur = connection.cursor()
+cur_col = connection.cursor()
 
 columns = ('Sl No', 'Name', 'Type', 'Quantity Left', 'Cost', 'Purpose', 'Expiry Date', 'Rack location', 'Manufacture')
 
@@ -51,7 +51,7 @@ def open_win():  # OPENS MAIN MENU---------------MAIN MENU
 
 
 def delete_stock():  # OPENS DELETE WINDOW---------------DELETES A PARTICULAR STOCK ITEM
-    global cur, c, flag, lb1, d
+    global cur_col, connection, flag, lb1, d
     apt.destroy()
     flag = 'd'
     d = Tk()
@@ -67,7 +67,7 @@ def delete_stock():  # OPENS DELETE WINDOW---------------DELETES A PARTICULAR ST
 
 
 def ren():
-    global lb1, d, cur, c
+    global lb1, d, cur_col, c
 
     def on_vsb(*args):
         lb1.yview(*args)
@@ -87,8 +87,8 @@ def ren():
     lb2.grid(row=3, column=1)
     lb1.bind('<MouseWheel>', on_mousewheel)
     lb2.bind('<MouseWheel>', on_mousewheel)
-    cur.execute("select *from med")
-    for i in cur:
+    cur_col.execute("select *from med")
+    for i in cur_col:
         cx += 1
         s1 = [str(i[0]), str(i[1])]
         s2 = [str(i[3]), str(i[6]), str(i[4])]
@@ -99,13 +99,13 @@ def ren():
 
 
 def sel_del(e):
-    global lb1, d, cur, c, p, sl2
+    global lb1, d, cur_col, connection, p, sl2
     p = lb1.curselection()
     print(p)
     x = 0
     sl2 = ''
-    cur.execute("select * from med")
-    for i in cur:
+    cur_col.execute("select * from med")
+    for i in cur_col:
         print(x, p[0])
         if x == int(p[0]):
             sl2 = i[0]
@@ -114,30 +114,30 @@ def sel_del(e):
     connection.commit()
     print(sl2)
     Label(d, text=' ', bg='white', width=20).grid(row=0, column=1)
-    cur.execute('Select * from med')
-    for i in cur:
+    cur_col.execute('Select * from med')
+    for i in cur_col:
         if i[0] == sl2:
             Label(d, text=i[0] + '. ' + i[1], bg='white').grid(row=0, column=1)
     connection.commit()
 
 
 def delete():
-    global p, c, cur, d
-    cur.execute("delete from med where sl_no=?", (sl2,))
+    global p, connection, cur_col, d
+    cur_col.execute("delete from med where sl_no=?", (sl2,))
     connection.commit()
     ren()
 
 
 def modify():  # window for modification---------------MODIFY
-    global cur, c, accept, flag, att, up, n, name_, apt, st, col, col_n
+    global cur_col, connection, accept, flag, att, up, n, name_, apt, st, col, col_n
     col = ('', '', 'type', 'qty_left', 'cost', 'purpose', 'expdt', 'loc', 'mfg')
     col_n = ('', '', 'Type', 'Quantity Left', 'Cost', 'Purpose', 'Expiry Date', 'Rack location', 'Manufacture')
     flag = 'st'
     name_ = ''
     apt.destroy()
     n = []
-    cur.execute("select * from med")
-    for i in cur:
+    cur_col.execute("select * from med")
+    for i in cur_col:
         n.append(i[1])
     connection.commit()
     st = Tk()
@@ -155,8 +155,8 @@ def modify():  # window for modification---------------MODIFY
     vsb = Scrollbar(orient='vertical', command=on_vsb)
     vsb.grid(row=1, column=3, sticky=N + S)
     name_ = Listbox(st, width=43, yscrollcommand=vsb.set)
-    cur.execute("select *from med")
-    for i in cur:
+    cur_col.execute("select *from med")
+    for i in cur_col:
         cx += 1
         name_.insert(cx, (str(i[0]) + '.  ' + str(i[1])))
         name_.grid(row=1, column=1, columnspan=2)
@@ -186,14 +186,14 @@ def res():
 
 
 def sel_mn(e):
-    global n, name_, name_mn, sl, c, cur
+    global n, name_, name_mn, sl, connection, cur_col
     name_mn = ''
     p = name_.curselection()
     print(p)
     x = 0
     sl = ''
-    cur.execute("select * from med")
-    for i in cur:
+    cur_col.execute("select * from med")
+    for i in cur_col:
         print(x, p[0])
         if x == int(p[0]):
             sl = i[0]
@@ -206,11 +206,11 @@ def sel_mn(e):
 
 
 def show_val():
-    global st, name_mn, att, cur, c, col, col_n, sl
+    global st, name_mn, att, cur_col, connection, col, col_n, sl
     for i in range(3):
         Label(st, width=20, text='                         ').grid(row=5, column=i)
-    cur.execute("select * from med")
-    for i in cur:
+    cur_col.execute("select * from med")
+    for i in cur_col:
         for j in range(9):
             if att.get() == col_n[j] and sl == i[0]:
                 Label(st, text=str(i[0])).grid(row=5, column=0)
@@ -220,18 +220,18 @@ def show_val():
 
 
 def save_mod():  # save modified data
-    global cur, c, att, name_mn, st, up, col_n, sl
+    global cur_col, connection, att, name_mn, st, up, col_n, sl
     for i in range(9):
         if att.get() == col_n[i]:
             a = col[i]
     sql = "update med set '%s' = '%s' where sl_no = '%s'" % (a, up.get(), sl)
-    cur.execute(sql)
+    cur_col.execute(sql)
     connection.commit()
     Label(st, text='Updated!').grid(row=5, column=4)
 
 
 def stock():  # add to stock window---------------ADD TO STOCK
-    global cur, c, columns, accept, flag, sto, apt
+    global cur_col, connection, columns, accept, flag, sto, apt
     apt.destroy()
     flag = 'sto'
     accept = [''] * 10
@@ -256,8 +256,8 @@ def stock():  # add to stock window---------------ADD TO STOCK
 
 
 def ref():  # creates a multi-listbox manually to show the whole database
-    global sto, c, cur
-
+    global sto, connection, cur_col
+    
     def on_vsb(*args):
         lb1.yview(*args)
         lb2.yview(*args)
@@ -297,8 +297,8 @@ def ref():  # creates a multi-listbox manually to show the whole database
     lb4.bind('<MouseWheel>', on_mousewheel)
     lb5.bind('<MouseWheel>', on_mousewheel)
     lb6.bind('<MouseWheel>', on_mousewheel)
-    cur.execute("select *from med")
-    for i in cur:
+    cur_col.execute("select *from med")
+    for i in cur_col:
         cx += 1
         seq = (str(i[0]), str(i[1]))
         lb1.insert(cx, '. '.join(seq))
@@ -319,18 +319,18 @@ def reset():
 
 
 def submit():  # for new stock submission
-    global accept, c, cur, columns, sto
+    global accept, connection, cur_col, columns, sto
     prev = time.perf_counter()
     x = [''] * 10
-    cur.execute("select * from med")
-    for i in cur:
+    cur_col.execute("select * from med")
+    for i in cur_col:
         y = int(i[0])
     for i in range(1, 9):
         x[i] = accept[i].get()
     sql = "insert into med values('%s','%s','%s','%s','%s','%s','%s','%s','%s')" % (
     y + 1, x[1], x[2], x[3], x[4], x[5], x[6], x[7], x[8])
-    cur.execute(sql)
-    cur.execute("select * from med")
+    cur_col.execute(sql)
+    cur_col.execute("select * from med")
     connection.commit()
     now = time.perf_counter()
     print(now - prev)
@@ -341,13 +341,13 @@ def submit():  # for new stock submission
 
 
 def chk():  # checks if the medicine is already present so that can be modified
-    global cur, c, accept, sto
-    cur.execute("select * from med")
-    for i in cur:
+    global cur_col, connection, accept, sto
+    cur_col.execute("select * from med")
+    for i in cur_col:
         if accept[6].get() == i[6] and i[1] == accept[1].get():
             sql = "update med set qty_left = '%s' where name = '%s'" % (
             str(int(i[3]) + int(accept[3].get())), accept[1].get())
-            cur.execute(sql)
+            cur_col.execute(sql)
             connection.commit()
             top = Tk()
             Label(top, width=20, text='Modified!').pack()
@@ -359,14 +359,14 @@ def chk():  # checks if the medicine is already present so that can be modified
 
 
 def exp_date():  # expiry window open---------------EXPIRY
-    global exp, s, c, cur, flag, apt, flags
+    global exp, s, connection, cur_col, flag, apt, flags
     apt.destroy()
     flag = 'exp'
     from datetime import date
     now = time.localtime()
     n = []
-    cur.execute("select * from med")
-    for i in cur:
+    cur_col.execute("select * from med")
+    for i in cur_col:
         n.append(i[1])
     connection.commit()
     exp = Tk()
@@ -379,21 +379,21 @@ def exp_date():  # expiry window open---------------EXPIRY
     s.grid(row=3, column=0)
     Button(exp, text='Check Expiry date', command=s_exp).grid(row=3, column=1)
     Label(exp, text='-' * 80).grid(row=4, column=0, columnspan=3)
-    if flags == 'apt1':
+    if flags == 'apt1': # For Customer's Service
         Button(exp, text='Main Menu', command=main_cus).grid(row=5, column=2)
-    else:
+    else:   # For 
         Button(exp, width=20, text='Check Products expiring', command=exp_dt).grid(row=5, column=0)
         Button(exp, text='Main Menu', command=main_menu).grid(row=5, column=2)
     exp.mainloop()
 
 
 def s_exp():  # shows the expiry date of the medicine entered
-    global c, cur, s, exp, top
+    global connection, cur_col, s, exp, top
     from datetime import date
     now = time.localtime()
     d1 = date(now[0], now[1], now[2])
-    cur.execute("select * from med")
-    for i in cur:
+    cur_col.execute("select * from med")
+    for i in cur_col:
         if i[1] == s.get():
             q = i[6]
             d2 = date(int('20' + q[8:10]), int(q[3:5]), int(q[0:2]))
@@ -407,7 +407,7 @@ def s_exp():  # shows the expiry date of the medicine entered
 
 
 def exp_dt():  # shows medicine to expire in the coming week
-    global c, cur, exp, top
+    global connection, cur_col, exp, top
     x = 0
     z = 1
     from datetime import datetime, timedelta
@@ -419,8 +419,8 @@ def exp_dt():  # shows medicine to expire in the coming week
     d1 = date(now[0], now[1], now[2])
     d3 = date(int(d[0:4]), int(d[5:7]), int(d[8:10]))
     Label(exp, text='S.No' + '   ' + 'Name' + '     Qty.    ' + 'Exp_date').grid(row=6, column=0, columnspan=2)
-    cur.execute("select * from med")
-    for i in cur:
+    cur_col.execute("select * from med")
+    for i in cur_col:
         s = i[6]
         d2 = date(int('20' + s[8:10]), int(s[3:5]), int(s[0:2]))
 
@@ -437,7 +437,7 @@ def exp_dt():  # shows medicine to expire in the coming week
 
 
 def billing():  # to create bills for customer---------------BILLING system
-    global c, cur, apt, flag, t, name, name1, add, st, names, qty, sl, qtys, vc_id, n, namee, lb1
+    global connection, cur_col, apt, flag, t, name, name1, add, st, names, qty, sl, qtys, vc_id, n, namee, lb1
     t = 0
     vc_id = ''
     names = []
@@ -445,8 +445,8 @@ def billing():  # to create bills for customer---------------BILLING system
     sl = []
     n = []
     qtys = [''] * 10
-    cur.execute("select *from med")
-    for i in cur:
+    cur_col.execute("select *from med")
+    for i in cur_col:
         n.append(i[1])
     connection.commit()
     if flag == 'st':
@@ -485,7 +485,7 @@ def billing():  # to create bills for customer---------------BILLING system
 
 
 def refresh():
-    global cur, c, st, lb1, lb2, vsb
+    global cur_col, connection, st, lb1, lb2, vsb
 
     def on_vsb(*args):
         lb1.yview(*args)
@@ -505,8 +505,8 @@ def refresh():
     lb2.grid(row=8, column=1)
     lb1.bind('<MouseWheel>', on_mousewheel)
     lb2.bind('<MouseWheel>', on_mousewheel)
-    cur.execute("select *from med")
-    for i in cur:
+    cur_col.execute("select *from med")
+    for i in cur_col:
         cx += 1
         lb1.insert(cx, str(i[0]) + '. ' + str(i[1]))
         lb2.insert(cx, ' ' + str(i[7]) + '        ' + str(i[3]) + '             Rs ' + str(i[4]))
@@ -522,8 +522,8 @@ def select_mn(e):  # store the selected medicine from listbox
     from datetime import date
     now = time.localtime()
     d1 = date(now[0], now[1], now[2])
-    cur.execute("select * from med")
-    for i in cur:
+    cur_col.execute("select * from med")
+    for i in cur_col:
         if x == int(p[0]):
             sl1 = int(i[0])
             break
@@ -535,7 +535,7 @@ def select_mn(e):  # store the selected medicine from listbox
 
 
 def append2bill():  # append to the bill
-    global st, names, nm, qty, sl, cur, c, sl1
+    global st, names, nm, qty, sl, cur_col, connection, sl1
     sl.append(sl1)
     names.append(nm)
     qty.append(qtys.get())
@@ -544,9 +544,9 @@ def append2bill():  # append to the bill
 
 
 def blue():  # check if valued customer
-    global st, c, cur, named, addd, t, vc_id
-    cur.execute("select * from cus")
-    for i in cur:
+    global st, connection, cur_col, named, addd, t, vc_id
+    cur_col.execute("select * from cus")
+    for i in cur_col:
         if vc_id.get() != '' and int(vc_id.get()) == i[2]:
             named = i[0]
             addd = i[1]
@@ -560,7 +560,7 @@ def blue():  # check if valued customer
 
 
 def make_bill():  # makes bill
-    global t, c, B, cur, st, names, qty, sl, named, addd, name1, add, det, vc_id
+    global t, connection, B, cur_col, st, names, qty, sl, named, addd, name1, add, det, vc_id
     price = [0.0] * 10
     q = 0
     det = ['', '', '', '', '', '', '', '']
@@ -568,11 +568,11 @@ def make_bill():  # makes bill
     for i in range(len(sl)):
         print(sl[i], ' ', qty[i], ' ', names[i])
     for k in range(len(sl)):
-        cur.execute("select * from med where sl_no=?", (sl[k],))
-        for i in cur:
+        cur_col.execute("select * from med where sl_no=?", (sl[k],))
+        for i in cur_col:
             price[k] = int(qty[k]) * float(i[4])
             print(qty[k], price[k])
-            cur.execute("update med set qty_left=? where sl_no=?", (int(i[3]) - int(qty[k]), sl[k]))
+            cur_col.execute("update med set qty_left=? where sl_no=?", (int(i[3]) - int(qty[k]), sl[k]))
         connection.commit()
     det[5] = str(random.randint(100, 999))
     B = 'bill_' + str(det[5]) + '.txt'
@@ -590,8 +590,8 @@ def make_bill():  # makes bill
         m += "Address: %s\n" % addd
         det[0] = named
         det[1] = addd
-        cur.execute('select * from cus')
-        for i in cur:
+        cur_col.execute('select * from cus')
+        for i in cur_col:
             if i[0] == named:
                 det[7] = i[2]
     else:
@@ -631,7 +631,7 @@ def make_bill():  # makes bill
     bill.write(m)
     bill.close()
     cb = ('cus_name', 'cus_add', 'items', 'Total_cost', 'bill_dt', 'bill_no', 'bill', 'val_id')
-    cur.execute('insert into bills values(?,?,?,?,?,?,?,?)',
+    cur_col.execute('insert into bills values(?,?,?,?,?,?,?,?)',
                 (det[0], det[1], det[2], det[3], det[4], det[5], det[6], det[7]))
     connection.commit()
 
@@ -641,7 +641,7 @@ def print_bill():
 
 
 def show_rev():  # opens revenue window---------------TOTAL REVENUE
-    global c, cur, flag, rev
+    global connection, cur_col, flag, rev
     apt.destroy()
     cb = ('cus_name', 'cus_add', 'items', 'Total_cost', 'bill_dt', 'bill_no', 'bill', 'val_id')
     flag = 'rev'
@@ -649,8 +649,8 @@ def show_rev():  # opens revenue window---------------TOTAL REVENUE
     total = 0.0
     today = str(time.localtime()[2]) + '/' + str(time.localtime()[1]) + '/' + str(time.localtime()[0])
     Label(rev, text='Today: ' + today).grid(row=0, column=0)
-    cur.execute('select * from bills')
-    for i in cur:
+    cur_col.execute('select * from bills')
+    for i in cur_col:
         if i[4] == today:
             total += float(i[3])
     print(total)
@@ -661,8 +661,8 @@ def show_rev():  # opens revenue window---------------TOTAL REVENUE
     vsb.grid(row=2, column=1, sticky=N + S)
     lb1.grid(row=2, column=0)
     vsb.config(command=lb1.yview)
-    cur.execute("select * from bills")
-    for i in cur:
+    cur_col.execute("select * from bills")
+    for i in cur_col:
         if i[4] == today:
             cx += 1
             lb1.insert(cx, 'Bill No.: ' + str(i[5]) + '    : Rs ' + str(i[3]))
@@ -672,13 +672,13 @@ def show_rev():  # opens revenue window---------------TOTAL REVENUE
 
 
 def search():  # search window medicine and symptom details---------------SEARCH MEDICINE RACK & SYMPTOMS
-    global c, cur, flag, st, mn, sym, flags
+    global connection, cur_col, flag, st, mn, sym, flags
     flag = 'st'
     apt.destroy()
-    cur.execute("Select * from med")
+    cur_col.execute("Select * from med")
     symp = ['nil']
     med_name = ['nil']
-    for i in cur:
+    for i in cur_col:
         symp.append(i[5])
         med_name.append(i[1])
     st = Tk()
@@ -698,11 +698,11 @@ def search():  # search window medicine and symptom details---------------SEARCH
 
 
 def search_med():
-    global c, cur, st, sym, columns
-    cur.execute("select * from med")
+    global connection, cur_col, st, sym, columns
+    cur_col.execute("select * from med")
     y = []
     x = 0
-    for i in cur:
+    for i in cur_col:
         if i[5] == sym.get():
             y.append(
                 str(i[0]) + '. ' + str(i[1]) + '  Rs ' + str(i[4]) + '    Rack : ' + str(i[7]) + '    Mfg : ' + str(
@@ -717,9 +717,9 @@ def search_med():
 
 
 def val_cus():  # to enter new valued customer---------------NEW VALUED CUSTOMER
-    global val, flag, dbt, name_vc, add_vc, cur, c, vc_id
+    global val, flag, dbt, name_vc, add_vc, cur_col, connection, vc_id
     apt.destroy()
-    cur.execute("select * from cus")
+    cur_col.execute("select * from cus")
     flag = 'val'
     val = Tk()
     Label(val, text="ENTER VALUED CUSTOMER DETAILS").grid(row=0, column=0, columnspan=3)
@@ -740,11 +740,11 @@ def val_cus():  # to enter new valued customer---------------NEW VALUED CUSTOMER
 
 
 def val_get():  # to submit new valued customer details
-    global name_vc, add_vc, val, dbt, c, cur, apt, vc_id
-    cur.execute("insert into cus values(?,?,?)", (name_vc.get(), add_vc.get(), vc_id.get()))
+    global name_vc, add_vc, val, dbt, connection, cur_col, apt, vc_id
+    cur_col.execute("insert into cus values(?,?,?)", (name_vc.get(), add_vc.get(), vc_id.get()))
     l.execute("insert into log values(?,?)", (name_vc.get(), vc_id.get()))
-    cur.execute("select * from cus")
-    for i in cur:
+    cur_col.execute("select * from cus")
+    for i in cur_col:
         print(i[0], i[1], i[2])
     connection.commit()
     login.commit()
