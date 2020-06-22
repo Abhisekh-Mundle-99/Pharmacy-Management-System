@@ -888,7 +888,7 @@ def focus_next_widget(event):
 def on_close(event):
     global msg_open
     msg_open = FALSE
-    event.widget.destroy()
+
 
 
 def again1():
