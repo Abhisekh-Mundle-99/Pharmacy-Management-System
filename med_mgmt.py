@@ -18,6 +18,7 @@ connection = sqlite3.connect("medicine.db")
 cur_col = connection.cursor()
 
 columns = ('Sl No', 'Name', 'Type', 'Quantity Left', 'Cost', 'Purpose', 'Expiry Date', 'Rack location', 'Manufacture')
+msg_open = FALSE
 
 
 def open_win():  # OPENS MAIN MENU---------------MAIN MENU
@@ -405,7 +406,7 @@ def s_exp():  # shows the expiry date of the medicine entered
                 Label(exp, text=i[6]).grid(row=3, column=2)
     connection.commit()
 
-msg_open = FALSE
+
 def exp_dt():  # shows medicine to expire in the coming week
     global connection, cur_col, exp, top, msg_open
     x = 0
@@ -431,10 +432,11 @@ def exp_dt():  # shows medicine to expire in the coming week
             x += 1
             z += 1
         elif d1 > d2:
-            if !msg_open:
+            if msg_open == FALSE:
                 top = Tk()
                 msg_open = TRUE
                 Label(top, width=20, text=str(i[1]) + ' is EXPIRED!').pack()
+                top.bind("<Destroy>", on_close)
     connection.commit()
 
 
@@ -880,6 +882,13 @@ def on_return(event):
 def focus_next_widget(event):
     event.widget.tk_focusNext().focus()
     return "break"
+
+
+# General prevent-duplicate-window function
+def on_close(event):
+    global msg_open
+    msg_open = FALSE
+    event.widget.destroy()
 
 
 def again1():
