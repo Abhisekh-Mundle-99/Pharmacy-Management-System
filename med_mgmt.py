@@ -405,9 +405,9 @@ def s_exp():  # shows the expiry date of the medicine entered
                 Label(exp, text=i[6]).grid(row=3, column=2)
     connection.commit()
 
-
+msg_open = FALSE
 def exp_dt():  # shows medicine to expire in the coming week
-    global connection, cur_col, exp, top
+    global connection, cur_col, exp, top, msg_open
     x = 0
     z = 1
     from datetime import datetime, timedelta
@@ -431,8 +431,10 @@ def exp_dt():  # shows medicine to expire in the coming week
             x += 1
             z += 1
         elif d1 > d2:
-            top = Tk()
-            Label(top, width=20, text=str(i[1]) + ' is EXPIRED!').pack()
+            if !msg_open:
+                top = Tk()
+                msg_open = TRUE
+                Label(top, width=20, text=str(i[1]) + ' is EXPIRED!').pack()
     connection.commit()
 
 
