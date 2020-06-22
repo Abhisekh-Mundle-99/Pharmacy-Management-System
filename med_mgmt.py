@@ -6,6 +6,7 @@ import tempfile
 import win32api
 import win32print
 
+
 f = ''
 flag = ''
 flags = ''
@@ -13,8 +14,8 @@ flags = ''
 login = sqlite3.connect("admin.db")
 l = login.cursor()
 
-c = sqlite3.connect("medicine.db")
-cur = c.cursor()
+connection = sqlite3.connect("medicine.db")
+cur = connection.cursor()
 
 columns = ('Sl No', 'Name', 'Type', 'Quantity Left', 'Cost', 'Purpose', 'Expiry Date', 'Rack location', 'Manufacture')
 
@@ -93,7 +94,7 @@ def ren():
         s2 = [str(i[3]), str(i[6]), str(i[4])]
         lb1.insert(cx, '. '.join(s1))
         lb2.insert(cx, '   '.join(s2))
-    c.commit()
+    connection.commit()
     lb1.bind('<<ListboxSelect>>', sel_del)
 
 
@@ -110,20 +111,20 @@ def sel_del(e):
             sl2 = i[0]
             break
         x += 1
-    c.commit()
+    connection.commit()
     print(sl2)
     Label(d, text=' ', bg='white', width=20).grid(row=0, column=1)
     cur.execute('Select * from med')
     for i in cur:
         if i[0] == sl2:
             Label(d, text=i[0] + '. ' + i[1], bg='white').grid(row=0, column=1)
-    c.commit()
+    connection.commit()
 
 
 def delete():
     global p, c, cur, d
     cur.execute("delete from med where sl_no=?", (sl2,))
-    c.commit()
+    connection.commit()
     ren()
 
 
@@ -138,7 +139,7 @@ def modify():  # window for modification---------------MODIFY
     cur.execute("select * from med")
     for i in cur:
         n.append(i[1])
-    c.commit()
+    connection.commit()
     st = Tk()
     st.title('MODIFY')
     Label(st, text='-' * 48 + ' MODIFY DATABASE ' + '-' * 48).grid(row=0, column=0, columnspan=6)
@@ -159,7 +160,7 @@ def modify():  # window for modification---------------MODIFY
         cx += 1
         name_.insert(cx, (str(i[0]) + '.  ' + str(i[1])))
         name_.grid(row=1, column=1, columnspan=2)
-    c.commit()
+    connection.commit()
     name_.bind('<MouseWheel>', on_mousewheel)
     name_.bind('<<ListboxSelect>>', sel_mn)
 
@@ -198,7 +199,7 @@ def sel_mn(e):
             sl = i[0]
             break
         x += 1
-    c.commit()
+    connection.commit()
     print(sl, "serial")
     name_nm = n[int(sl)]
     print(name_nm)
@@ -215,7 +216,7 @@ def show_val():
                 Label(st, text=str(i[0])).grid(row=5, column=0)
                 Label(st, text=str(i[1])).grid(row=5, column=1)
                 Label(st, text=str(i[j])).grid(row=5, column=2)
-    c.commit()
+    connection.commit()
 
 
 def save_mod():  # save modified data
@@ -225,7 +226,7 @@ def save_mod():  # save modified data
             a = col[i]
     sql = "update med set '%s' = '%s' where sl_no = '%s'" % (a, up.get(), sl)
     cur.execute(sql)
-    c.commit()
+    connection.commit()
     Label(st, text='Updated!').grid(row=5, column=4)
 
 
@@ -306,7 +307,7 @@ def ref():  # creates a multi-listbox manually to show the whole database
         lb4.insert(cx, i[4])
         lb5.insert(cx, i[5])
         lb6.insert(cx, i[6] + '    ' + i[7] + '    ' + i[8])
-    c.commit()
+    connection.commit()
 
 
 def reset():
@@ -330,7 +331,7 @@ def submit():  # for new stock submission
     y + 1, x[1], x[2], x[3], x[4], x[5], x[6], x[7], x[8])
     cur.execute(sql)
     cur.execute("select * from med")
-    c.commit()
+    connection.commit()
     now = time.perf_counter()
     print(now - prev)
     top = Tk()
@@ -347,14 +348,14 @@ def chk():  # checks if the medicine is already present so that can be modified
             sql = "update med set qty_left = '%s' where name = '%s'" % (
             str(int(i[3]) + int(accept[3].get())), accept[1].get())
             cur.execute(sql)
-            c.commit()
+            connection.commit()
             top = Tk()
             Label(top, width=20, text='Modified!').pack()
             top.mainloop()
             main_menu()
         else:
             submit()
-    c.commit()
+    connection.commit()
 
 
 def exp_date():  # expiry window open---------------EXPIRY
@@ -364,10 +365,10 @@ def exp_date():  # expiry window open---------------EXPIRY
     from datetime import date
     now = time.localtime()
     n = []
-    cur.execute("select *from med")
+    cur.execute("select * from med")
     for i in cur:
         n.append(i[1])
-    c.commit()
+    connection.commit()
     exp = Tk()
     exp.title('EXPIRY CHECK')
     Label(exp, text='Today : ' + str(now[2]) + '/' + str(now[1]) + '/' + str(now[0])).grid(row=0, column=0,
@@ -402,7 +403,7 @@ def s_exp():  # shows the expiry date of the medicine entered
                 Label(top, text='EXPIRED!').pack()
             else:
                 Label(exp, text=i[6]).grid(row=3, column=2)
-    c.commit()
+    connection.commit()
 
 
 def exp_dt():  # shows medicine to expire in the coming week
@@ -432,7 +433,7 @@ def exp_dt():  # shows medicine to expire in the coming week
         elif d1 > d2:
             top = Tk()
             Label(top, width=20, text=str(i[1]) + ' is EXPIRED!').pack()
-    c.commit()
+    connection.commit()
 
 
 def billing():  # to create bills for customer---------------BILLING system
@@ -447,7 +448,7 @@ def billing():  # to create bills for customer---------------BILLING system
     cur.execute("select *from med")
     for i in cur:
         n.append(i[1])
-    c.commit()
+    connection.commit()
     if flag == 'st':
         st.destroy()
     else:
@@ -509,7 +510,7 @@ def refresh():
         cx += 1
         lb1.insert(cx, str(i[0]) + '. ' + str(i[1]))
         lb2.insert(cx, ' ' + str(i[7]) + '        ' + str(i[3]) + '             Rs ' + str(i[4]))
-    c.commit()
+    connection.commit()
     lb1.bind('<<ListboxSelect>>', select_mn)
 
 
@@ -527,7 +528,7 @@ def select_mn(e):  # store the selected medicine from listbox
             sl1 = int(i[0])
             break
         x += 1
-    c.commit()
+    connection.commit()
     print(sl1)
     nm = n[x]
     print(nm)
@@ -555,7 +556,7 @@ def blue():  # check if valued customer
             Label(st, text='Valued Customer!').grid(row=4, column=1)
             t = 1
             break
-    c.commit()
+    connection.commit()
 
 
 def make_bill():  # makes bill
@@ -572,7 +573,7 @@ def make_bill():  # makes bill
             price[k] = int(qty[k]) * float(i[4])
             print(qty[k], price[k])
             cur.execute("update med set qty_left=? where sl_no=?", (int(i[3]) - int(qty[k]), sl[k]))
-        c.commit()
+        connection.commit()
     det[5] = str(random.randint(100, 999))
     B = 'bill_' + str(det[5]) + '.txt'
     total = 0.00
@@ -632,7 +633,7 @@ def make_bill():  # makes bill
     cb = ('cus_name', 'cus_add', 'items', 'Total_cost', 'bill_dt', 'bill_no', 'bill', 'val_id')
     cur.execute('insert into bills values(?,?,?,?,?,?,?,?)',
                 (det[0], det[1], det[2], det[3], det[4], det[5], det[6], det[7]))
-    c.commit()
+    connection.commit()
 
 
 def print_bill():
@@ -665,7 +666,7 @@ def show_rev():  # opens revenue window---------------TOTAL REVENUE
         if i[4] == today:
             cx += 1
             lb1.insert(cx, 'Bill No.: ' + str(i[5]) + '    : Rs ' + str(i[3]))
-    c.commit()
+    connection.commit()
     Button(rev, text='Main Menu', command=main_menu).grid(row=15, column=0)
     rev.mainloop()
 
@@ -689,9 +690,9 @@ def search():  # search window medicine and symptom details---------------SEARCH
     sym.grid(row=3, column=1)
     Button(st, width=15, text='Search', command=search_med).grid(row=3, column=2)
     Label(st, text='-' * 70).grid(row=4, column=0, columnspan=3)
-    if flags == 'apt1':
+    if flags == 'apt1': # for customer's medicine search
         Button(st, width=15, text='Main Menu', command=main_cus).grid(row=6, column=2)
-    else:
+    else:   # for admin search
         Button(st, width=15, text='Main Menu', command=main_menu).grid(row=6, column=2)
     st.mainloop()
 
@@ -711,7 +712,7 @@ def search_med():
     for i in range(len(y)):
         Label(top, text=y[i]).grid(row=i, column=0)
     Button(top, text='OK', command=top.destroy).grid(row=5, column=0)
-    c.commit()
+    connection.commit()
     top.mainloop()
 
 
@@ -745,7 +746,7 @@ def val_get():  # to submit new valued customer details
     cur.execute("select * from cus")
     for i in cur:
         print(i[0], i[1], i[2])
-    c.commit()
+    connection.commit()
     login.commit()
 
 
