@@ -328,12 +328,10 @@ def submit():  # for new stock submission
     prev = time.perf_counter()
     x = [''] * 10
     cur_col.execute("select * from med")
-    for i in cur_col:
-        y = int(i[0])
     for i in range(1, 9):
         x[i] = accept[i].get()
     sql = "insert into med values('%s','%s','%s','%s','%s','%s','%s','%s','%s')" % (
-    y + 1, x[1], x[2], x[3], x[4], x[5], x[6], x[7], x[8])
+        cur_col.lastrowid, x[1], x[2], x[3], x[4], x[5], x[6], x[7], x[8])
     cur_col.execute(sql)
     cur_col.execute("select * from med")
     connection.commit()
