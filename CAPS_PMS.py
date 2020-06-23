@@ -26,6 +26,7 @@ def open_win():  # OPENS MAIN MENU---------------MAIN MENU
     flag = 'apt'
     apt = Tk()
     apt.title("PMS")
+    apt.iconbitmap('icon.ico')
     Label(apt, text="          YOUR WORKSPACE          ", bg="cyan4", fg="white", font="Arial 25").grid(row=0, column=0,
                                                                                                         columnspan=3)
     Label(apt, text=' ' * 80).grid(row=1, column=0, columnspan=3)
@@ -57,6 +58,7 @@ def delete_stock():  # OPENS DELETE WINDOW---------------DELETES A PARTICULAR ST
     flag = 'd'
     d = Tk()
     d.title("Delete a product from Stock")
+    d.iconbitmap('icon.ico')
     Label(d, text='Enter Product to delete:').grid(row=0, column=0)
     Label(d, text='', width=30, bg='white').grid(row=0, column=1)
     Label(d, text='Product').grid(row=2, column=0)
@@ -143,6 +145,7 @@ def modify():  # window for modification---------------MODIFY
     connection.commit()
     st = Tk()
     st.title('MODIFY')
+    st.iconbitmap('icon.ico')
     Label(st, text='-' * 48 + ' MODIFY DATABASE ' + '-' * 48).grid(row=0, column=0, columnspan=6)
 
     def on_vsb(*args):
@@ -238,6 +241,7 @@ def stock():  # add to stock window---------------ADD TO STOCK
     accept = [''] * 10
     sto = Tk()
     sto.title('STOCK ENTRY')
+    sto.iconbitmap('icon.ico')
     Label(sto, text='ENTER NEW PRODUCT DATA TO THE STOCK').grid(row=0, column=0, columnspan=2)
     Label(sto, text='-' * 50).grid(row=1, column=0, columnspan=2)
     for i in range(1, len(columns)):
@@ -372,6 +376,7 @@ def exp_date():  # expiry window open---------------EXPIRY
     connection.commit()
     exp = Tk()
     exp.title('EXPIRY CHECK')
+    exp.iconbitmap('icon.ico')
     Label(exp, text='Today : ' + str(now[2]) + '/' + str(now[1]) + '/' + str(now[0])).grid(row=0, column=0,
                                                                                            columnspan=3)
     Label(exp, text='Selling Expired Medicines and Drugs is Illegal').grid(row=1, column=0, columnspan=3)
@@ -460,6 +465,7 @@ def billing():  # to create bills for customer---------------BILLING system
     flag = 'st'
     st = Tk()
     st.title('BILLING SYSTEM')
+    st.iconbitmap('icon.ico')
     Label(st, text='-' * 48 + 'BILLING SYSTEM' + '-' * 49).grid(row=0, column=0, columnspan=7)
     Label(st, text='Enter Name: ').grid(row=1, column=0)
     name1 = Entry(st)
@@ -687,6 +693,7 @@ def search():  # search window medicine and symptom details---------------SEARCH
         med_name.append(i[1])
     st = Tk()
     st.title('SEARCH')
+    st.iconbitmap('icon.ico')
     Label(st, text=' SEARCH FOR MEDICINE ').grid(row=0, column=0, columnspan=3)
     Label(st, text='~' * 40).grid(row=1, column=0, columnspan=3)
     Label(st, text='Symptom Name').grid(row=3, column=0)
@@ -760,6 +767,7 @@ def again():  # for login window---------------LOGIN WINDOW
         apt.destroy()
     root = Tk()
     root.title('CAPS PMS')
+    root.iconbitmap('icon.ico')
     Label(root, text="CAPS PHARMACY", bg="teal", fg="White", font="Arial 25").grid(row=0, column=0, columnspan=5)
     Label(root, text="        Asansol Budha More, Paschim Burdwan, WB        ", bg="teal", fg="White").grid(row=1,
                                                                                                             column=0,
@@ -768,7 +776,7 @@ def again():  # for login window---------------LOGIN WINDOW
     un = Entry(root, width=20)
     un.grid(row=3, column=1, columnspan=4)
     un.bind("<Return>", focus_next_widget)
-    un.focus();
+    un.focus()
     Label(root, text='Password').grid(row=4, column=0)
     pwd = Entry(root, width=20)
     pwd.grid(row=4, column=1, columnspan=4)
@@ -860,6 +868,7 @@ def open_cus():  # OPENS MAIN MENU---------------MAIN MENU
     flags = 'apt1'
     apt = Tk()
     apt.title("PMS")
+    apt.iconbitmap('icon.ico')
     Label(apt, text="CAPS PHARMACY", bg="teal", fg="White", font="Arial 25").grid(row=0, column=0)
     # Label(apt, text='^'*25).grid(row=1,column=0)
     Label(apt, text='>>  WELCOME  <<').grid(row=2, column=0)
