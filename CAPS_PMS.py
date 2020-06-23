@@ -305,7 +305,7 @@ def ref():  # creates a multi-listbox manually to show the whole database
     cur_col.execute("select *from med")
     for i in cur_col:
         cx += 1
-        seq = (str(i[0]), str(i[1]))
+        seq = (str(i[0]+1), str(i[1]))
         lb1.insert(cx, '. '.join(seq))
         lb2.insert(cx, i[2])
         lb3.insert(cx, i[3])
@@ -328,10 +328,11 @@ def submit():  # for new stock submission
     prev = time.perf_counter()
     x = [''] * 10
     cur_col.execute("select * from med")
+    sl_no = cur_col.rowcount
     for i in range(1, 9):
-        x[i] = accept[i].get()
+        x[i] = accept[i].get()  #x: array of columns for each med
     sql = "insert into med values('%s','%s','%s','%s','%s','%s','%s','%s','%s')" % (
-        cur_col.lastrowid, x[1], x[2], x[3], x[4], x[5], x[6], x[7], x[8])
+        sl_no, x[1], x[2], x[3], x[4], x[5], x[6], x[7], x[8])
     cur_col.execute(sql)
     cur_col.execute("select * from med")
     connection.commit()
@@ -339,6 +340,7 @@ def submit():  # for new stock submission
     print(now - prev)
     top = Tk()
     Label(top, width=20, text='Success!').pack()
+    refresh()
     top.mainloop()
     main_menu()
 
@@ -516,7 +518,7 @@ def refresh():
     cur_col.execute("select *from med")
     for i in cur_col:
         cx += 1
-        lb1.insert(cx, str(i[0]) + '. ' + str(i[1]))
+        lb1.insert(cx, str(int(i[0]+1)) + '. ' + str(i[1]))
         lb2.insert(cx, ' ' + str(i[7]) + '        ' + str(i[3]) + '             Rs ' + str(i[4]))
     connection.commit()
     lb1.bind('<<ListboxSelect>>', select_mn)
