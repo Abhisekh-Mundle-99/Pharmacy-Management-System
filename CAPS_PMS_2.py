@@ -79,7 +79,7 @@ class Application(tk.Tk):
             bg_color = self.custom[0].get('bg')
             fg_color = self.custom[0].get('fg')
 
-        DBMS.change_pass('123')
+        DBMS.change_pass()
         self.create_login()
 
         # define all top menus
