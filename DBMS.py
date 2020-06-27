@@ -59,46 +59,82 @@ def print_file():
 
 
 class LoginForm(tk.Toplevel):
+<<<<<<< HEAD
+    username_Entry = None
+    password_Entry = None
+=======
+    username_entry = None
+    password_entry = None
+>>>>>>> c498a8521394e90cfcca83ba839b090787d392cc
+    is_logged_in = False
     def __init__(self, master, bg='white', fg='black'):
+
         super().__init__()
 
         self.master = master
 
         self.title("Login")
-        self.geometry("300x150")
+        self.geometry("400x150")
 
         tk.Label(self, text="YOUR WORKSPACE", bg="cyan4", fg="white", font="Arial 25").pack(fill=tk.BOTH, expand=1)
-
         tk.Label(self, text="Login ID").pack(fill=tk.BOTH, expand=1)
-        self.username = tk.Entry(self, bg=bg, fg=fg).pack(fill=tk.BOTH, expand=1)
+<<<<<<< HEAD
+        self.username_Entry = tk.Entry(self, bg=bg, fg=fg)
+        self.username_Entry.pack(fill=tk.BOTH, expand=0)
         tk.Label(self, text="Password").pack(fill=tk.BOTH, expand=1)
-        self.password = tk.Entry(self, bg=bg, fg=fg).pack(fill=tk.BOTH, expand=1)
+        self.password_Entry = tk.Entry(self, bg=bg, fg=fg)
+        self.password_Entry.pack(fill=tk.BOTH, expand=0)
+=======
+        self.username_entry = tk.Entry(self, bg=bg, fg=fg)
+        self.username_entry.pack(fill=tk.X, expand=0)
+        tk.Label(self, text="Password").pack(fill=tk.BOTH, expand=1)
+        self.password_entry = tk.Entry(self, bg=bg, fg=fg)
+        self.password_entry.pack(fill=tk.X, expand=0)
+>>>>>>> c498a8521394e90cfcca83ba839b090787d392cc
 
         self.submit_button = tk.Button(self, text="Login", command=self.submit, bg="pink").pack(fill=tk.X)
         #self.submit_button = tk.Button(self, text="Demo", command=demo, bg="orange").pack(fill=tk.X)
 
 # Submit Button's function to collect uID, pass, perform checks, and highlight issues
     def submit(self):
-        username = self.username.get()
-        password = self.password.get()
+<<<<<<< HEAD
+        username = self.username_Entry.get()
+        password = self.password_Entry.get()
 
         if not username:
-            self.username.configure(bg="red", fg="white")
+            self.username_Entry.configure(bg="red", fg="white")
         elif not password:
-            self.password.configure(bg="red", fg="white")
+            self.password_Entry.configure(bg="red", fg="white")
         elif username and password:
-            if not self.check():
-                self.username.configure(bg="red", fg="white")
-                self.password.configure(bg="red", fg="white")
+            if not check(self):
+                self.username_Entry.configure(bg="red", fg="white")
+                self.password_Entry.configure(bg="red", fg="white")
             else:
-                self.username.configure(bg="green", fg="white")
-                self.password.configure(bg="green", fg="white")
-                if login_type == "admin":
-                    self.master.admin_panel = AdminPanel(self.master)
-                    try:
-                        self.destroy()
-                    except:
-                        pass
+                self.username_Entry.configure(bg="green", fg="white")
+                self.password_Entry.configure(bg="green", fg="white")
+=======
+        username = self.username_entry.get()
+        password = self.password_entry.get()
+
+        if not username:
+            self.username_entry.configure(bg="red", fg="white")
+        elif not password:
+            self.password_entry.configure(bg="red", fg="white")
+        elif username and password:
+            if not check(self):
+                self.username_entry.configure(bg="red", fg="white")
+                self.password_entry.configure(bg="red", fg="white")
+            else:
+                self.username_entry.configure(bg="green", fg="white")
+                self.password_entry.configure(bg="green", fg="white")
+>>>>>>> c498a8521394e90cfcca83ba839b090787d392cc
+                tk.Label(self.master, text="Welcome", bg="cyan4", fg="white", font="Arial 25").pack(fill=tk.BOTH, expand=1)
+                #if login_type == "admin":
+                    #self.master.admin_panel = AdminPanel(self.master)
+                try:
+                    self.destroy()
+                except:
+                    pass
 
 
 """ DATABASE LOOKUP FUNCTIONS """
@@ -153,7 +189,11 @@ def check(self):
         # The comment below stops IDE warning "login_id might not have any value"
         # noinspection PyUnboundLocalVariable
         cur_log.execute("select * from log where username='%s' and password='%s'"
-                        % (login_id, self.password.get()))
+<<<<<<< HEAD
+                        % (login_id, self.password_Entry.get()))
+=======
+                        % (login_id, self.password_entry.get()))
+>>>>>>> c498a8521394e90cfcca83ba839b090787d392cc
         admin_db.commit()
         # confirm password for logged-in admin
         if cur_log.fetchone() is not None:
@@ -161,11 +201,18 @@ def check(self):
         else:
             return False
     else:
-        login_id = self.username.get()
+<<<<<<< HEAD
+        login_id = self.username_Entry.get()
         cur_log.execute("select * from log where username='%s' and password='%s'"
-                        % (login_id, self.password.get()))
+                        % (login_id, self.password_Entry.get()))
+=======
+        login_id = self.username_entry.get()
+        cur_log.execute("select * from log where username='%s' and password='%s'"
+                        % (login_id, self.password_entry.get()))
+>>>>>>> c498a8521394e90cfcca83ba839b090787d392cc
         admin_db.commit()
         if cur_log.fetchone() is not None:
+            self.is_logged_in = True
             return True
         else:
             login_type = cur_log.fetchone()[2]
@@ -364,3 +411,9 @@ def delete_from_cart(self):
 # Preparing Bill for transaction, performing calculations, storing in database etc
 def prepare_bill(self):
     qty.append(qtys.get())
+
+
+#spc function
+def change_pass(password):
+    cur_log.execute("update log set password=? where username = 'admin'", password)
+    admin_db.commit()

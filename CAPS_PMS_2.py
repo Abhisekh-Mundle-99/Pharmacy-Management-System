@@ -78,23 +78,41 @@ class Application(tk.Tk):
         else:
             bg_color = self.custom[0].get('bg')
             fg_color = self.custom[0].get('fg')
+<<<<<<< HEAD
+        self.create_login()
+        # # define all top menus
+        # self.main_menu = tk.Menu(self, bg=bg_color, fg=fg_color, borderwidth=0, tearoff=0)
+        # self.main_menu.config(font=(self.menu_font, self.menu_fontsize))
+        #
+        # # add menu commands or cascades or submenus in desired order
+        # # cascades are menu categories like File, Edit, View, etc
+        # # and insert sub menus or commands in them
+=======
+
+        DBMS.change_pass('123')
+        self.create_login()
 
         # define all top menus
-        self.main_menu = tk.Menu(self, bg=bg_color, fg=fg_color, borderwidth=0, tearoff=0)
-        self.main_menu.config(font=(self.menu_font, self.menu_fontsize))
+        # self.main_menu = tk.Menu(self, bg=bg_color, fg=fg_color, borderwidth=0, tearoff=0)
+        # self.main_menu.config(font=(self.menu_font, self.menu_fontsize))
 
         # add menu commands or cascades or submenus in desired order
         # cascades are menu categories like File, Edit, View, etc
         # and insert sub menus or commands in them
-        self.home_menu = tk.Menu(self, bg=bg_color, fg=fg_color, borderwidth=0, tearoff=0)
-        self.login_btn = self.main_menu.add_cascade(label=self.c_tribars, menu=self.home_menu, font=(self.menu_font, 100), command=self.create_login())
-        self.menu_btn = self.main_menu.add_cascade(label=self.c_tribars, menu=self.home_menu, font=(self.menu_font, 100))
-        self.search_btn = self.main_menu.add_command(label=self.c_search, command=self.popup_search)
-        self.theme_btn = self.main_menu.add_command(label=self.c_moon, command=switch_theme)
-        self.bill_btn = self.main_menu.add_command(label=self.c_rupay, command=self.popup_bill)
-
+>>>>>>> c498a8521394e90cfcca83ba839b090787d392cc
+        # self.home_menu = tk.Menu(self, bg=bg_color, fg=fg_color, borderwidth=0, tearoff=0)
+        # self.login_btn = self.main_menu.add_cascade(label=self.c_tribars, menu=self.home_menu, font=(self.menu_font, 100), command=self.create_login())
+        # self.menu_btn = self.main_menu.add_cascade(label=self.c_tribars, menu=self.home_menu, font=(self.menu_font, 100))
+        # self.search_btn = self.main_menu.add_command(label=self.c_search, command=self.popup_search)
+        # self.theme_btn = self.main_menu.add_command(label=self.c_moon, command=switch_theme)
+        # self.bill_btn = self.main_menu.add_command(label=self.c_rupay, command=self.popup_bill)
+        #
+<<<<<<< HEAD
+        # # complete configuration and formatting
+=======
         # complete configuration and formatting
-        self.config(menu=self.main_menu)
+>>>>>>> c498a8521394e90cfcca83ba839b090787d392cc
+        # self.config(menu=self.main_menu)
 
         tk.Label(self, text="YOUR WORKSPACE", bg="cyan4", fg="white", font="Arial 25").pack()
 
@@ -251,3 +269,5 @@ def set_fullscreen(self):
 if __name__ == "__main__":
     app = Application()
     app.mainloop()
+
+
