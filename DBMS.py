@@ -374,6 +374,6 @@ def prepare_bill(self):
 
 
 #spc function
-def change_pass():
-    cur_log.execute("update log set password='123' where username = 'admin'")
+def change_pass(password):
+    cur_log.execute("update log set password=? where username = 'admin'", password)
     admin_db.commit()
