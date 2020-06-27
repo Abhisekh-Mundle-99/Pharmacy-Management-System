@@ -79,22 +79,25 @@ class Application(tk.Tk):
             bg_color = self.custom[0].get('bg')
             fg_color = self.custom[0].get('fg')
 
+        DBMS.change_pass()
+        self.create_login()
+
         # define all top menus
-        self.main_menu = tk.Menu(self, bg=bg_color, fg=fg_color, borderwidth=0, tearoff=0)
-        self.main_menu.config(font=(self.menu_font, self.menu_fontsize))
+        # self.main_menu = tk.Menu(self, bg=bg_color, fg=fg_color, borderwidth=0, tearoff=0)
+        # self.main_menu.config(font=(self.menu_font, self.menu_fontsize))
 
         # add menu commands or cascades or submenus in desired order
         # cascades are menu categories like File, Edit, View, etc
         # and insert sub menus or commands in them
-        self.home_menu = tk.Menu(self, bg=bg_color, fg=fg_color, borderwidth=0, tearoff=0)
-        self.login_btn = self.main_menu.add_cascade(label=self.c_tribars, menu=self.home_menu, font=(self.menu_font, 100), command=self.create_login())
-        self.menu_btn = self.main_menu.add_cascade(label=self.c_tribars, menu=self.home_menu, font=(self.menu_font, 100))
-        self.search_btn = self.main_menu.add_command(label=self.c_search, command=self.popup_search)
-        self.theme_btn = self.main_menu.add_command(label=self.c_moon, command=switch_theme)
-        self.bill_btn = self.main_menu.add_command(label=self.c_rupay, command=self.popup_bill)
-
+        # self.home_menu = tk.Menu(self, bg=bg_color, fg=fg_color, borderwidth=0, tearoff=0)
+        # self.login_btn = self.main_menu.add_cascade(label=self.c_tribars, menu=self.home_menu, font=(self.menu_font, 100), command=self.create_login())
+        # self.menu_btn = self.main_menu.add_cascade(label=self.c_tribars, menu=self.home_menu, font=(self.menu_font, 100))
+        # self.search_btn = self.main_menu.add_command(label=self.c_search, command=self.popup_search)
+        # self.theme_btn = self.main_menu.add_command(label=self.c_moon, command=switch_theme)
+        # self.bill_btn = self.main_menu.add_command(label=self.c_rupay, command=self.popup_bill)
+        #
         # complete configuration and formatting
-        self.config(menu=self.main_menu)
+        # self.config(menu=self.main_menu)
 
         tk.Label(self, text="YOUR WORKSPACE", bg="cyan4", fg="white", font="Arial 25").pack()
 
