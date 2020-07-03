@@ -4,6 +4,12 @@ import tkinter.messagebox as msg
 import tkinter as tk
 import sqlite3
 
+
+total_sales = 4450
+total_profit = 2324
+turned_down = 0
+
+
 # there are 3 login types: admin | employee | demo mode
 # admins have complete access to all features of this application
 # employees have limited access and cannot delete inventory, or manage employee data
@@ -86,8 +92,29 @@ def change_pass():
 
 
 # Show summary
-def show_sum():
-    labels = ["Today's Sales", "Profits", "Discounts Given", "Expired Stock Today", "Total Expired", "Turned Down Customers"]
+def update_summary(self):
+    try:
+        labels = ["Today's Sales", "Profits", "Turned Down Customers"]
+        if total_sales == 0:
+            self.sum_sales.config(text="Nothing sold yet!", fg="red")
+        else:
+            self.sum_sales.config(text="Worth " + str(total_sales) + "₹", fg="green")
+
+        if total_sales == 0:
+            self.sum_profits.config(text="Nothing sold yet.", fg="red")
+        elif total_profit == 0:
+            self.sum_profits.config(text="No earnings yet.", fg="black")
+        else:
+            self.sum_profits.config(text="Worth " + str(total_profit) + "₹", fg="green")
+
+        if total_sales == 0:
+            self.sum_turned.config(text="Nothing sold yet.", fg="red")
+        if turned_down == 0:
+            self.sum_turned.config(text="No one turned down.", fg="green")
+        else:
+            self.sum_turned.config(text=str(turned_down) + " customers turned down!", bg="red", fg="black")
+    finally:
+        return
 
 
 # Show revenue

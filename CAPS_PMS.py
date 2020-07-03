@@ -120,7 +120,7 @@ def sel_del(e):
     cur_col.execute('Select * from med')
     for i in cur_col:
         if i[0] == sl2:
-            Label(d, text=i[0] + '. ' + i[1], bg='white').grid(row=0, column=1)
+            Label(d, text=i[0] + '. ' + str(i[1]), bg='white').grid(row=0, column=1)
     connection.commit()
 
 
@@ -328,6 +328,7 @@ def submit():  # for new stock submission
     prev = time.perf_counter()
     x = [''] * 10
     cur_col.execute("select * from med")
+    y=0
     for i in cur_col:
         y = int(i[0])
     for i in range(1, 9):

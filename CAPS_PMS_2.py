@@ -90,6 +90,7 @@ class Application(tk.Tk):
         if self.is_fullscreen:
             self.grid(self.cur_width * 0.8, self.cur_height * 0.8)
             # self.main_menu.grid()
+        DBMS.update_summary(self)
 
 # this function is used to properly minimize and maximize the window
     def overrideredirect(self, boolean=None):

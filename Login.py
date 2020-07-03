@@ -1,6 +1,7 @@
 import tkinter as tk
 from ctypes import windll
 from utility import *
+from MainMenu import *
 import DBMS
 
 """ LOGIN FORM CLASS : REDIRECTS TO ADMIN OR EMPLOYEE """
@@ -43,9 +44,10 @@ class LoginForm(tk.Tk):
         self.config(bg=bg)
 
         tk.Frame(self, bg="teal").pack(fill=tk.BOTH, expand=True)
-        tk.Label(self, text="CAPS PHARMACY", bg=bg_header, fg="White", font="Arial 25").pack(fill=tk.X, expand=False)
-        tk.Label(self, text="  Asansol Budha More, Paschim Burdwan, WB  ", bg=bg_banner
-                 , fg="White").pack(fill=tk.X)
+        tk.Label(self, text="CAPS PHARMACY", bg=bg_header, fg="White",
+                 font="Arial 25").pack(fill=tk.X, expand=False)
+        tk.Label(self, text="  Asansol Budha More, Paschim Burdwan, WB  ",
+                 bg=bg_banner, fg="White").pack(fill=tk.X)
         tk.Frame(self, bg=bg).pack(fill=tk.Y, expand=True)
 
         tk.Label(self, text="Login ID", bg=bg).pack(fill=tk.X)
@@ -188,18 +190,8 @@ def fill4admin(master):
     sidebar.rowconfigure(10, weight=10)
     sidebar.columnconfigure(0, weight=1)
 
-    body = tk.Frame(master, bg=bg_banner)
-    body.columnconfigure(0, weight=1)
-    body.columnconfigure(1, weight=1)
-    body.rowconfigure(0, weight=1)
-    body.rowconfigure(1, weight=1)
-
-    master.revenue = tk.LabelFrame(body, text="Today's Revenue", bg=bg_banner).grid(row=0, column=0, sticky=tk.NSEW)
-    master.shortage = tk.LabelFrame(body, text="Stock Shortage", bg=bg_banner).grid(row=1, column=0, sticky=tk.NSEW)
-    master.expired = tk.LabelFrame(body, text="Expired Products", bg=bg_banner).grid(row=0, column=1, sticky=tk.NSEW)
-    master.nearexpiry = tk.LabelFrame(body, text="Near Expiry", bg=bg_banner).grid(row=1, column=1, sticky=tk.NSEW)
-
-    body.grid(row=2, column=1, ipadx=10, sticky=tk.NSEW)
+    fill_revenue(master)
+    #fill_stock_info(master)
 
     master.footer = tk.Label(master, text=master.app_name, bg=bg_footer, fg=fg_header, font=font_footer)
     master.footer.grid(ipady=2, sticky=tk.EW, columnspan=2)
